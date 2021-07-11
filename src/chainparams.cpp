@@ -337,9 +337,8 @@ public:
         consensus.nBudgetPaymentsStartBlock = 1735; // actual historical value
         consensus.nBudgetPaymentsCycleBlocks = 16616; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
         consensus.nBudgetPaymentsWindowBlocks = 100;
-        consensus.nSuperblockStartBlock = 1736; // The block at which 12.1 goes live (end of final 12.0 budget cycle)
-        //consensus.nSuperblockStartHash = uint256S("0000051fb646ab7c70d14f1172f697bcca4ea62199d196d6f8ce895d432e793a");
-        consensus.nSuperblockStartHash = uint256S("");
+        consensus.nSuperblockStartBlock = 1736; //
+        consensus.nSuperblockStartHash = uint256S("00000003230a60c57e5719a5eb5b9af6c154ad07f17e89b3e97922d332e39e7e");
         consensus.nSuperblockCycle = 16616; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
         consensus.nGovernanceMinQuorum = 10;
         consensus.nGovernanceFilterElements = 20000;
@@ -504,12 +503,14 @@ public:
                  { 0, uint256S("0x0000002f1568bdf68617d63eee409514c6a405a44c6c7cf8a22d8d6e269b58af")},
                  { 1, uint256S("0x00000e9e986d7033cc6918c5ff7590d204bd2ad038a3f5b74a9cf5a3761cca2a")},
                  { 2, uint256S("0x000007758cc899f495608f84e039a9ff0293867d2d20906fd236a8bf5ea03950")},
+                 { 1000, uint256S("0x000000005b6cf91f714ca26cafc80b47622aa2246d2d979bb27811b46819283c")},
+                 { 1736, uint256S("0x00000003230a60c57e5719a5eb5b9af6c154ad07f17e89b3e97922d332e39e7e")},                 
             }
         };
 
         chainTxData = ChainTxData{
-             1625691942,
-             3,
+             1626000089,
+             5082,
              0.2             
         };
     }    
