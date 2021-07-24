@@ -457,7 +457,7 @@ Then when building, override the remote URLs that gbuild would otherwise pull fr
 ```bash
 
 cd /some/root/path/
-git clone https://github.com/dashpay/dash-detached-sigs.git
+git clone https://github.com/likli/hcc-detached-sigs.git
 
 BTCPATH=/some/root/path/hcc
 SIGPATH=/some/root/path/hcc-detached-sigs
