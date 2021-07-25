@@ -35,7 +35,7 @@ _hcc_tx() {
         # only commands are allowed
         # parse -help for commands
         local helpcmds
-        helpcmds=$($dash_tx -help | sed -e '1,/Commands:/d' -e 's/=.*/=/' -e '/^  [a-z]/ p' -e d )
+        helpcmds=$($hcc_tx -help | sed -e '1,/Commands:/d' -e 's/=.*/=/' -e '/^  [a-z]/ p' -e d )
         COMPREPLY=( $( compgen -W "$helpcmds" -- "$cur" ) )
     fi
 
@@ -46,7 +46,7 @@ _hcc_tx() {
 
     return 0
 } &&
-complete -F _dash_tx dash-tx
+complete -F _hcc_tx hcc-tx
 
 # Local variables:
 # mode: shell-script
