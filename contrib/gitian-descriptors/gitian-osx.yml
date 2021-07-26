@@ -30,7 +30,7 @@ packages:
 - "fonts-tuffy"
 - "ccache"
 remotes:
-- "url": "https://github.com/Likli/hcc.git"
+- "url": "https://github.com/hcccrypto/hcc.git"
   "dir": "hcc"
 files:
 - "MacOSX10.11.sdk.tar.gz"
