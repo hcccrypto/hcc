@@ -33,7 +33,7 @@ Check out the source code in the following directory hierarchy.
 
 	cd /path/to/your/toplevel/build
 	git clone https://github.com/dashpay/gitian.sigs.git
-	git clone https://github.com/dashpay/dash-detached-sigs.git
+	git clone https://github.com/likli/hcc-detached-sigs.git
 	git clone https://github.com/devrandom/gitian-builder.git
 	git clone https://github.com/dashpay/dash.git
 
@@ -57,7 +57,7 @@ If you're using the automated script (found in [contrib/gitian-build.py](/contri
 
 Setup Gitian descriptors:
 
-    pushd ./dash
+    pushd ./hcc
     export SIGNER="(your Gitian key, ie UdjinM6, Pasta, etc)"
     export VERSION=(new version, e.g. 0.12.3)
     git fetch
@@ -91,10 +91,10 @@ Create the OS X SDK tarball, see the [OS X readme](README_osx.md) for details, a
 
 NOTE: Gitian is sometimes unable to download files. If you have errors, try the step below.
 
-By default, Gitian will fetch source files as needed. To cache them ahead of time, make sure you have checked out the tag you want to build in dash, then:
+By default, Gitian will fetch source files as needed. To cache them ahead of time, make sure you have checked out the tag you want to build in hcc, then:
 
     pushd ./gitian-builder
-    make -C ../dash/depends download SOURCES_PATH=`pwd`/cache/common
+    make -C ../hcc/depends download SOURCES_PATH=`pwd`/cache/common
     popd
 
 Only missing files will be fetched, so this is safe to re-run for each build.
@@ -102,50 +102,50 @@ Only missing files will be fetched, so this is safe to re-run for each build.
 NOTE: Offline builds must use the --url flag to ensure Gitian fetches only from local URLs. For example:
 
     pushd ./gitian-builder
-    ./bin/gbuild --url dash=/path/to/dash,signature=/path/to/sigs {rest of arguments}
+    ./bin/gbuild --url hcc=/path/to/hcc,signature=/path/to/sigs {rest of arguments}
     popd
 
 The gbuild invocations below <b>DO NOT DO THIS</b> by default.
 
-### Build and sign Dash Core for Linux, Windows, and OS X:
+### Build and sign hcc Core for Linux, Windows, and OS X:
 
     pushd ./gitian-builder
-    ./bin/gbuild --num-make 2 --memory 3000 --commit dash=v${VERSION} ../dash/contrib/gitian-descriptors/gitian-linux.yml
-    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-linux --destination ../gitian.sigs/ ../dash/contrib/gitian-descriptors/gitian-linux.yml
-    mv build/out/dash-*.tar.gz build/out/src/dash-*.tar.gz ../
+    ./bin/gbuild --num-make 2 --memory 3000 --commit hcc=v${VERSION} ../hcc/contrib/gitian-descriptors/gitian-linux.yml
+    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-linux --destination ../gitian.sigs/ ../hcc/contrib/gitian-descriptors/gitian-linux.yml
+    mv build/out/hcc-*.tar.gz build/out/src/hcc-*.tar.gz ../
 
-    ./bin/gbuild --num-make 2 --memory 3000 --commit dash=v${VERSION} ../dash/contrib/gitian-descriptors/gitian-win.yml
-    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-win-unsigned --destination ../gitian.sigs/ ../dash/contrib/gitian-descriptors/gitian-win.yml
-    mv build/out/dash-*-win-unsigned.tar.gz inputs/dash-win-unsigned.tar.gz
-    mv build/out/dash-*.zip build/out/dash-*.exe ../
+    ./bin/gbuild --num-make 2 --memory 3000 --commit hcc=v${VERSION} ../hcc/contrib/gitian-descriptors/gitian-win.yml
+    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-win-unsigned --destination ../gitian.sigs/ ../hcc/contrib/gitian-descriptors/gitian-win.yml
+    mv build/out/hcc-*-win-unsigned.tar.gz inputs/hcc-win-unsigned.tar.gz
+    mv build/out/hcc-*.zip build/out/hcc-*.exe ../
 
-    ./bin/gbuild --num-make 2 --memory 3000 --commit dash=v${VERSION} ../dash/contrib/gitian-descriptors/gitian-osx.yml
-    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../dash/contrib/gitian-descriptors/gitian-osx.yml
-    mv build/out/dash-*-osx-unsigned.tar.gz inputs/dash-osx-unsigned.tar.gz
-    mv build/out/dash-*.tar.gz build/out/dash-*.dmg ../
+    ./bin/gbuild --num-make 2 --memory 3000 --commit hcc=v${VERSION} ../hcc/contrib/gitian-descriptors/gitian-osx.yml
+    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../hcc/contrib/gitian-descriptors/gitian-osx.yml
+    mv build/out/hcc-*-osx-unsigned.tar.gz inputs/hcc-osx-unsigned.tar.gz
+    mv build/out/hcc-*.tar.gz build/out/hcc-*.dmg ../
     popd
 
 Build output expected:
 
-  1. source tarball (`dash-${VERSION}.tar.gz`)
-  2. linux 32-bit and 64-bit dist tarballs (`dash-${VERSION}-linux[32|64].tar.gz`)
-  3. windows 32-bit and 64-bit unsigned installers and dist zips (`dash-${VERSION}-win[32|64]-setup-unsigned.exe`, `dash-${VERSION}-win[32|64].zip`)
-  4. OS X unsigned installer and dist tarball (`dash-${VERSION}-osx-unsigned.dmg`, `dash-${VERSION}-osx64.tar.gz`)
+  1. source tarball (`hcc-${VERSION}.tar.gz`)
+  2. linux 32-bit and 64-bit dist tarballs (`hcc-${VERSION}-linux[32|64].tar.gz`)
+  3. windows 32-bit and 64-bit unsigned installers and dist zips (`hcc-${VERSION}-win[32|64]-setup-unsigned.exe`, `hcc-${VERSION}-win[32|64].zip`)
+  4. OS X unsigned installer and dist tarball (`hcc-${VERSION}-osx-unsigned.dmg`, `hcc-${VERSION}-osx64.tar.gz`)
   5. Gitian signatures (in `gitian.sigs/${VERSION}-<linux|{win,osx}-unsigned>/(your Gitian key)/`)
 
 ### Verify other gitian builders signatures to your own. (Optional)
 
 Add other gitian builders keys to your gpg keyring, and/or refresh keys.
 
-    gpg --import dash/contrib/gitian-keys/*.pgp
+    gpg --import hcc/contrib/gitian-keys/*.pgp
     gpg --refresh-keys
 
 Verify the signatures
 
     pushd ./gitian-builder
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-linux ../dash/contrib/gitian-descriptors/gitian-linux.yml
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-unsigned ../dash/contrib/gitian-descriptors/gitian-win.yml
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../dash/contrib/gitian-descriptors/gitian-osx.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-linux ../hcc/contrib/gitian-descriptors/gitian-linux.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-unsigned ../hcc/contrib/gitian-descriptors/gitian-win.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../hcc/contrib/gitian-descriptors/gitian-osx.yml
     popd
 
 ### Next steps:
@@ -166,22 +166,22 @@ Codesigner only: Create Windows/OS X detached signatures:
 
 Codesigner only: Sign the osx binary:
 
-    transfer dashcore-osx-unsigned.tar.gz to osx for signing
-    tar xf dashcore-osx-unsigned.tar.gz
+    transfer hcccore-osx-unsigned.tar.gz to osx for signing
+    tar xf hcccore-osx-unsigned.tar.gz
     ./detached-sig-create.sh -s "Key ID" -o runtime
     Enter the keychain password and authorize the signature
     Move signature-osx.tar.gz back to the gitian host
 
 Codesigner only: Sign the windows binaries:
 
-    tar xf dashcore-win-unsigned.tar.gz
+    tar xf hcccore-win-unsigned.tar.gz
     ./detached-sig-create.sh -key /path/to/codesign.key
     Enter the passphrase for the key when prompted
     signature-win.tar.gz will be created
 
 Codesigner only: Commit the detached codesign payloads:
 
-    cd ~/dashcore-detached-sigs
+    cd ~/hcccore-detached-sigs
     checkout the appropriate branch for this release series
     rm -rf *
     tar xf signature-osx.tar.gz
@@ -194,25 +194,25 @@ Codesigner only: Commit the detached codesign payloads:
 Non-codesigners: wait for Windows/OS X detached signatures:
 
 - Once the Windows/OS X builds each have 3 matching signatures, they will be signed with their respective release keys.
-- Detached signatures will then be committed to the [dash-detached-sigs](https://github.com/dashpay/dash-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
+- Detached signatures will then be committed to the [hcc-detached-sigs](https://github.com/likli/hcc-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
 
 Create (and optionally verify) the signed OS X binary:
 
     pushd ./gitian-builder
-    ./bin/gbuild -i --commit signature=v${VERSION} ../dash/contrib/gitian-descriptors/gitian-osx-signer.yml
-    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../dash/contrib/gitian-descriptors/gitian-osx-signer.yml
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../dash/contrib/gitian-descriptors/gitian-osx-signer.yml
-    mv build/out/dash-osx-signed.dmg ../dash-${VERSION}-osx.dmg
+    ./bin/gbuild -i --commit signature=v${VERSION} ../hcc/contrib/gitian-descriptors/gitian-osx-signer.yml
+    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../hcc/contrib/gitian-descriptors/gitian-osx-signer.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../hcc/contrib/gitian-descriptors/gitian-osx-signer.yml
+    mv build/out/hcc-osx-signed.dmg ../hcc-${VERSION}-osx.dmg
     popd
 
 Create (and optionally verify) the signed Windows binaries:
 
     pushd ./gitian-builder
-    ./bin/gbuild -i --commit signature=v${VERSION} ../dash/contrib/gitian-descriptors/gitian-win-signer.yml
-    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../dash/contrib/gitian-descriptors/gitian-win-signer.yml
-    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-signed ../dash/contrib/gitian-descriptors/gitian-win-signer.yml
-    mv build/out/dash-*win64-setup.exe ../dash-${VERSION}-win64-setup.exe
-    mv build/out/dash-*win32-setup.exe ../dash-${VERSION}-win32-setup.exe
+    ./bin/gbuild -i --commit signature=v${VERSION} ../hcc/contrib/gitian-descriptors/gitian-win-signer.yml
+    ./bin/gsign --signer "$SIGNER" --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../hcc/contrib/gitian-descriptors/gitian-win-signer.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-signed ../hcc/contrib/gitian-descriptors/gitian-win-signer.yml
+    mv build/out/hcc-*win64-setup.exe ../hcc-${VERSION}-win64-setup.exe
+    mv build/out/hcc-*win32-setup.exe ../hcc-${VERSION}-win32-setup.exe
     popd
 
 Commit your signature for the signed OS X/Windows binaries:
@@ -234,23 +234,23 @@ sha256sum * > SHA256SUMS
 
 The list of files should be:
 ```
-dash-${VERSION}-aarch64-linux-gnu.tar.gz
-dash-${VERSION}-arm-linux-gnueabihf.tar.gz
-dash-${VERSION}-i686-pc-linux-gnu.tar.gz
-dash-${VERSION}-x86_64-linux-gnu.tar.gz
-dash-${VERSION}-osx64.tar.gz
-dash-${VERSION}-osx.dmg
-dash-${VERSION}.tar.gz
-dash-${VERSION}-win32-setup.exe
-dash-${VERSION}-win32.zip
-dash-${VERSION}-win64-setup.exe
-dash-${VERSION}-win64.zip
+hcc-${VERSION}-aarch64-linux-gnu.tar.gz
+hcc-${VERSION}-arm-linux-gnueabihf.tar.gz
+hcc-${VERSION}-i686-pc-linux-gnu.tar.gz
+hcc-${VERSION}-x86_64-linux-gnu.tar.gz
+hcc-${VERSION}-osx64.tar.gz
+hcc-${VERSION}-osx.dmg
+hcc-${VERSION}.tar.gz
+hcc-${VERSION}-win32-setup.exe
+hcc-${VERSION}-win32.zip
+hcc-${VERSION}-win64-setup.exe
+hcc-${VERSION}-win64.zip
 ```
 The `*-debug*` files generated by the Gitian build contain debug symbols
 for troubleshooting by developers. It is assumed that anyone that is interested
 in debugging can run Gitian to generate the files for themselves. To avoid
 end-user confusion about which file to pick, as well as save storage
-space *do not upload these to the dash.org server*.
+space *do not upload these to the hcc.org server*.
 
 - GPG-sign it, delete the unsigned file:
 ```
@@ -260,9 +260,9 @@ rm SHA256SUMS
 (the digest algorithm is forced to sha256 to avoid confusion of the `Hash:` header that GPG adds with the SHA256 used for the files)
 Note: check that SHA256SUMS itself doesn't end up in SHA256SUMS, which is a spurious/nonsensical entry.
 
-- Upload zips and installers, as well as `SHA256SUMS.asc` from last step, to the dash.org server
+- Upload zips and installers, as well as `SHA256SUMS.asc` from last step, to the hcc.org server
 
-- Update dash.org
+- Update hcc.org
 
 - Announce the release:
 
