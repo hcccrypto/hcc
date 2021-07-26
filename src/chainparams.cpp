@@ -452,6 +452,7 @@ public:
         // vSeeds.emplace_back("77.223.122.240");
         //vSeeds.emplace_back("dnsseed.dashdot.io");
         //vFixedSeeds.clear();
+        vSeeds.emplace_back("seeds.healthcarecoin.net");
         vSeeds.emplace_back("seeds.hcc.cash");
         //vSeeds.clear();
         
