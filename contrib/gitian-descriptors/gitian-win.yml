@@ -25,7 +25,7 @@ packages:
 - "rename"
 - "ccache"
 remotes:
-- "url": "https://github.com/likli/hcc.git"
+- "url": "https://github.com/hcccrypto/hcc.git"
   "dir": "hcc"
 files: []
 script: |
