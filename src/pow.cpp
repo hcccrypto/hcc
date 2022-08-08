@@ -79,7 +79,7 @@ unsigned int static KimotoGravityWell(const CBlockIndex* pindexLast, const Conse
     return bnNew.GetCompact();
 }
 
-unsigned int static DarkGravityWave(const CBlockIndex* pindexLast, const Consensus::Params& params) {
+unsigned int static DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params) {
     /* current difficulty formula, dash - DarkGravity v3, written by Evan Duffield - evan@dash.org */
     const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
     int64_t nPastBlocks = 24;
@@ -92,6 +92,7 @@ unsigned int static DarkGravityWave(const CBlockIndex* pindexLast, const Consens
     const CBlockIndex *pindex = pindexLast;
     arith_uint256 bnPastTargetAvg;
 
+    int nHeavyHashBlocksFound = 0;
     for (unsigned int nCountBlocks = 1; nCountBlocks <= nPastBlocks; nCountBlocks++) {
         arith_uint256 bnTarget = arith_uint256().SetCompact(pindex->nBits);
         if (nCountBlocks == 1) {
@@ -101,9 +102,25 @@ unsigned int static DarkGravityWave(const CBlockIndex* pindexLast, const Consens
             bnPastTargetAvg = (bnPastTargetAvg * nCountBlocks + bnTarget) / (nCountBlocks + 1);
         }
 
+        // Count how blocks are HeavyHash mined in the last 24 blocks
+        if (pindex->nTime >= nHeavyHashActivationTime) {
+            nHeavyHashBlocksFound++;
+        }
+
         if(nCountBlocks != nPastBlocks) {
             assert(pindex->pprev); // should never fail
             pindex = pindex->pprev;
+        }
+    }
+
+    // If we are mining a HeavyHash block. We check to see if we have mined
+    // 24 HeavyHash blocks already. If we haven't we are going to return our
+    // temp limit. This will allow us to change algos to kawpow without having to
+    // change the DGW math.
+    if (pblock->nTime >= nHeavyHashActivationTime) {
+        if (nHeavyHashBlocksFound != nPastBlocks) {
+            const arith_uint256 bnHeavyHashPoWLimit = UintToArith256(params.heavypowLimit);
+            return bnHeavyHashPoWLimit.GetCompact();
         }
     }
 
@@ -201,7 +218,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         return KimotoGravityWell(pindexLast, params);
     }
 
-    return DarkGravityWave(pindexLast, params);
+    return DarkGravityWave(pindexLast, pblock, params);
 }
 
 // for DIFF_BTC only!
@@ -241,6 +258,10 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
     // Check range
     if (fNegative || bnTarget == 0 || fOverflow || bnTarget > UintToArith256(params.powLimit))
         return false;
+
+    //std::cout<<"HASH: "<<UintToArith256(hash).ToString()<<std::endl;
+    //std::cout<<"TARGET: "<<bnTarget.ToString()<<std::endl;
+
 
     // Check proof of work matches claimed amount
     if (UintToArith256(hash) > bnTarget)

@@ -9,14 +9,36 @@
 #include <streams.h>
 #include <tinyformat.h>
 #include <utilstrencodings.h>
-#include <crypto/common.h>
+
+//static const uint32_t MAINNET_HEAVYHASHACTIVATIONTIME = 1645806364;
+
+uint32_t nHeavyHashActivationTime;
+
 
 uint256 CBlockHeader::GetHash() const
 {
-    std::vector<unsigned char> vch(80);
-    CVectorWriter ss(SER_GETHASH, PROTOCOL_VERSION, vch, 0);
-    ss << *this;
-    return HashX11((const char *)vch.data(), (const char *)vch.data() + vch.size());
+    if (nTime < nHeavyHashActivationTime) {
+        std::vector<unsigned char> vch(80);
+        CVectorWriter ss(SER_GETHASH, PROTOCOL_VERSION, vch, 0);
+        ss << *this;
+        //std::cout<<"HASHX11"<<std::endl;
+        return HashX11((const char *)vch.data(), (const char *)vch.data() + vch.size());
+    } else {
+        //std::cout<<"HEAVYHASH"<<std::endl;
+        //std::cout<<nTime<<std::endl;
+        //std::cout<<nHeavyHashActivationTime<<std::endl;
+        return GetHeavyHash();
+    }
+}
+
+
+uint256 CBlockHeader::GetHeavyHash() const
+{
+    uint256 seed;
+    CSHA3_256().Write(hashPrevBlock.begin(), 32).Finalize(seed.begin());
+    uint64_t matrix[64*64];
+    GenerateHeavyHashMatrix(seed, matrix);
+    return SerializeHeavyHash(*this, matrix);
 }
 
 std::string CBlock::ToString() const

@@ -137,6 +137,7 @@ UniValue generateBlocks(std::shared_ptr<CReserveScript> coinbaseScript, int nGen
             IncrementExtraNonce(pblock, chainActive.Tip(), nExtraNonce);
         }
         while (nMaxTries > 0 && pblock->nNonce < nInnerLoopCount && !CheckProofOfWork(pblock->GetHash(), pblock->nBits, Params().GetConsensus())) {
+            //std::cout<<"GENERATING BLOCK: NONCE: "<<pblock->nNonce<<std::endl;
             ++pblock->nNonce;
             --nMaxTries;
         }

@@ -355,9 +355,13 @@ public:
         consensus.DIP0003EnforcementHash = uint256S("000007758cc899f495608f84e039a9ff0293867d2d20906fd236a8bf5ea03950");
 
         consensus.DIP0008Height = 2; // 00000000000000112e41e4b3afda8b233b8cc07c532d2eac5de097b68358c43e
-        consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // Dash: 1 day
-        consensus.nPowTargetSpacing = 2.5 * 60; // Dash: 2.5 minutes
+        //consensus.powLimit =      uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
+        //consensus.heavypowLimit = uint256S("000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
+        consensus.powLimit =      uint256S("01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
+        consensus.heavypowLimit = uint256S("00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
+
+        consensus.nPowTargetTimespan = 24 * 60 * 60; // 1 day
+        consensus.nPowTargetSpacing = 2.5 * 60; // 2.5 minutes
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 5;
@@ -427,15 +431,20 @@ public:
 	    //consensus.defaultAssumeValid = uint256S("0x000001aaabe5f339fecac0cea9eb1adec6b40add827f5adefb43c04b62332831");
         consensus.defaultAssumeValid = uint256S("0x000007758cc899f495608f84e039a9ff0293867d2d20906fd236a8bf5ea03950");
 
+
+        // Change mining algo
+        nHHActivationTime=1645806364;
+        nHeavyHashActivationTime=nHHActivationTime;
+
         /**
          * The message start string is designed to be unlikely to occur in normal data.
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0xbf;
-        pchMessageStart[1] = 0x0c;
-        pchMessageStart[2] = 0x6b;
-        pchMessageStart[3] = 0xbd;
+        pchMessageStart[0] = 0xb5;
+        pchMessageStart[1] = 0xe6;
+        pchMessageStart[2] = 0xd7;
+        pchMessageStart[3] = 0xf9;
         nDefaultPort = 8888;
         nPruneAfterHeight = 100000;
 
@@ -452,8 +461,7 @@ public:
         // vSeeds.emplace_back("77.223.122.240");
         //vSeeds.emplace_back("dnsseed.dashdot.io");
         //vFixedSeeds.clear();
-        vSeeds.emplace_back("seeds.healthcarecoin.net");
-        vSeeds.emplace_back("seeds.hcc.cash");
+        vSeeds.emplace_back("seeds.healthcarecoin.net");        
         //vSeeds.clear();
         
 
@@ -498,6 +506,8 @@ public:
         nMinSporkKeys = 1;
         fBIP9CheckMasternodesUpgraded = true;
         //fBIP9CheckMasternodesUpgraded = false;
+
+
 
         checkpointData = {
             {
