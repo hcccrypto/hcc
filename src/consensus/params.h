@@ -55,6 +55,11 @@ enum LLMQType : uint8_t
     LLMQ_400_85 = 3, // 400 members, 340 (85%) threshold, one every 24 hours
     LLMQ_100_67 = 4, // 100 members, 67 (67%) threshold, one per hour
 
+    LLMQ_10_7 = 5, 
+    LLMQ_50_40 = 6,
+    LLMQ_20_16 = 7,
+
+
     // for testing only
     LLMQ_TEST = 100, // 3 members, 2 (66%) threshold, one per hour. Params might differ when -llmqtestparams is used
 
@@ -179,6 +184,7 @@ struct Params {
     /** Proof of work parameters */
     uint256 powLimit;
     uint256 heavypowLimit;
+    uint32_t heavyHashActivationTime;
     bool fPowAllowMinDifficultyBlocks;
     bool fPowNoRetargeting;
     int64_t nPowTargetSpacing;

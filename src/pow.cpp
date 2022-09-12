@@ -81,7 +81,11 @@ unsigned int static KimotoGravityWell(const CBlockIndex* pindexLast, const Conse
 
 unsigned int static DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params) {
     /* current difficulty formula, dash - DarkGravity v3, written by Evan Duffield - evan@dash.org */
-    const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
+    arith_uint256 bnPowLimit;
+    if (pindexLast->nTime < nHeavyHashActivationTime)
+        bnPowLimit = UintToArith256(params.powLimit);
+    else 
+        bnPowLimit = UintToArith256(uint256S("01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
     int64_t nPastBlocks = 24;
 
     // make sure we have at least (nPastBlocks + 1) blocks, otherwise just return powLimit
@@ -186,7 +190,13 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 {
     assert(pindexLast != nullptr);
     assert(pblock != nullptr);
-    const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
+    arith_uint256 bnPowLimit=UintToArith256(params.powLimit);
+    // if(pblock->GetBlockTime()<params.heavyHashActivationTime) {
+    //     bnPowLimit = UintToArith256(params.powLimit);
+    // } else {
+    //     bnPowLimit = UintToArith256(params.heavypowLimit);
+    // }
+
 
     // this is only active on devnets
     if (pindexLast->nHeight < params.nMinimumDifficultyBlocks) {
@@ -247,20 +257,24 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
     return bnNew.GetCompact();
 }
 
-bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params& params)
+bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params& params, uint32_t blocktime)
 {
     bool fNegative;
     bool fOverflow;
     arith_uint256 bnTarget;
+    uint256 powLimit;
+
+    if(blocktime>=params.heavyHashActivationTime) powLimit=params.heavypowLimit;
+    else powLimit=params.powLimit;
 
     bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
 
     // Check range
-    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > UintToArith256(params.powLimit))
+    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > UintToArith256(powLimit))
         return false;
 
-    //std::cout<<"HASH: "<<UintToArith256(hash).ToString()<<std::endl;
-    //std::cout<<"TARGET: "<<bnTarget.ToString()<<std::endl;
+    std::cout<<"HASH: "<<UintToArith256(hash).ToString()<<std::endl;
+    std::cout<<"TARGET: "<<bnTarget.ToString()<<std::endl;
 
 
     // Check proof of work matches claimed amount
