@@ -252,6 +252,25 @@ static Consensus::LLMQParams llmq50_60 = {
         .recoveryMembers = 25,
 };
 
+static Consensus::LLMQParams llmq10_7 = {
+        .type = Consensus::LLMQ_10_7,
+        .name = "llmq_10_7",
+        .size = 10,
+        .minSize = 7,
+        .threshold = 6,
+
+        .dkgInterval = 24, // one DKG per hour
+        .dkgPhaseBlocks = 2,
+        .dkgMiningWindowStart = 10, // dkgPhaseBlocks * 5 = after finalization
+        .dkgMiningWindowEnd = 18,
+        .dkgBadVotesThreshold = 7,
+
+        .signingActiveQuorumCount = 24, // a full day worth of LLMQs
+
+        .keepOldConnections = 4,
+        .recoveryMembers = 6,
+};
+
 static Consensus::LLMQParams llmq400_60 = {
         .type = Consensus::LLMQ_400_60,
         .name = "llmq_400_60",
@@ -269,6 +288,25 @@ static Consensus::LLMQParams llmq400_60 = {
 
         .keepOldConnections = 5,
         .recoveryMembers = 100,
+};
+
+static Consensus::LLMQParams llmq50_40 = {
+        .type = Consensus::LLMQ_50_40,
+        .name = "llmq_50_40",
+        .size = 50,
+        .minSize = 40,
+        .threshold = 30,
+
+        .dkgInterval = 24 * 12, // one DKG every 12 hours
+        .dkgPhaseBlocks = 4,
+        .dkgMiningWindowStart = 20, // dkgPhaseBlocks * 5 = after finalization
+        .dkgMiningWindowEnd = 28,
+        .dkgBadVotesThreshold = 40,
+
+        .signingActiveQuorumCount = 4, // two days worth of LLMQs
+
+        .keepOldConnections = 5,
+        .recoveryMembers = 25,
 };
 
 // Used for deployment and min-proto-version signalling, so it needs a higher threshold
@@ -309,6 +347,25 @@ static Consensus::LLMQParams llmq100_67 = {
 
         .keepOldConnections = 25,
         .recoveryMembers = 50,
+};
+
+static Consensus::LLMQParams llmq20_16 = {
+        .type = Consensus::LLMQ_20_16,
+        .name = "llmq_20_16",
+        .size = 20,
+        .minSize = 16,
+        .threshold = 12,
+
+        .dkgInterval = 24, // one DKG per hour
+        .dkgPhaseBlocks = 2,
+        .dkgMiningWindowStart = 10, // dkgPhaseBlocks * 5 = after finalization
+        .dkgMiningWindowEnd = 18,
+        .dkgBadVotesThreshold = 16,
+
+        .signingActiveQuorumCount = 24, // a full day worth of LLMQs
+
+        .keepOldConnections = 25,
+        .recoveryMembers = 10,
 };
 
 
@@ -355,9 +412,9 @@ public:
         consensus.DIP0003EnforcementHash = uint256S("000007758cc899f495608f84e039a9ff0293867d2d20906fd236a8bf5ea03950");
 
         consensus.DIP0008Height = 2; // 00000000000000112e41e4b3afda8b233b8cc07c532d2eac5de097b68358c43e
-        //consensus.powLimit =      uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
-        //consensus.heavypowLimit = uint256S("000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
-        consensus.powLimit =      uint256S("01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
+        consensus.powLimit =      uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
+        // consensus.heavypowLimit = uint256S("000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
+        // consensus.powLimit =      uint256S("01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
         consensus.heavypowLimit = uint256S("00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
 
         consensus.nPowTargetTimespan = 24 * 60 * 60; // 1 day
@@ -433,8 +490,10 @@ public:
 
 
         // Change mining algo
-        nHHActivationTime=1645806364;
+        nHHActivationTime=1645806364;                          
         nHeavyHashActivationTime=nHHActivationTime;
+        consensus.heavyHashActivationTime=nHHActivationTime;
+
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -486,6 +545,14 @@ public:
         consensus.llmqs[Consensus::LLMQ_400_60] = llmq400_60;
         consensus.llmqs[Consensus::LLMQ_400_85] = llmq400_85;
         consensus.llmqs[Consensus::LLMQ_100_67] = llmq100_67;
+        //consensus.llmqs[Consensus::LLMQ_10_7] = llmq10_7;
+        //consensus.llmqs[Consensus::LLMQ_50_40] = llmq50_40;
+        //consensus.llmqs[Consensus::LLMQ_20_16] = llmq20_16;
+
+        // consensus.llmqTypeChainLocks = Consensus::LLMQ_50_40;
+        // consensus.llmqTypeInstantSend = Consensus::LLMQ_10_7;
+        // consensus.llmqTypePlatform = Consensus::LLMQ_20_16;
+
         consensus.llmqTypeChainLocks = Consensus::LLMQ_400_60;
         consensus.llmqTypeInstantSend = Consensus::LLMQ_50_60;
         consensus.llmqTypePlatform = Consensus::LLMQ_100_67;
