@@ -27,17 +27,17 @@ std::vector<CSporkDef> sporkDefs = {
     MAKE_SPORK_DEF(SPORK_23_QUORUM_POSE,                   4070908800ULL), // OFF
 };
 
-/*
-std::vector<CSporkDef> sporkDefs = {
-    MAKE_SPORK_DEF(SPORK_2_INSTANTSEND_ENABLED,            0ULL), // OFF
-    MAKE_SPORK_DEF(SPORK_3_INSTANTSEND_BLOCK_FILTERING,    0ULL), // OFFULL
-    MAKE_SPORK_DEF(SPORK_9_SUPERBLOCKS_ENABLED,            0ULL), // OFF
-    MAKE_SPORK_DEF(SPORK_17_QUORUM_DKG_ENABLED,            0ULL), // OFF
-    MAKE_SPORK_DEF(SPORK_19_CHAINLOCKS_ENABLED,            0ULL), // OFF
-    MAKE_SPORK_DEF(SPORK_21_QUORUM_ALL_CONNECTED,          0ULL), // OFF
-    MAKE_SPORK_DEF(SPORK_23_QUORUM_POSE,                   0), // OFF
-};
-*/
+
+//std::vector<CSporkDef> sporkDefs = {
+//    MAKE_SPORK_DEF(SPORK_2_INSTANTSEND_ENABLED,            0ULL), // OFF
+//    MAKE_SPORK_DEF(SPORK_3_INSTANTSEND_BLOCK_FILTERING,    0ULL), // OFFULL
+//    MAKE_SPORK_DEF(SPORK_9_SUPERBLOCKS_ENABLED,            0ULL), // OFF
+//    MAKE_SPORK_DEF(SPORK_17_QUORUM_DKG_ENABLED,            0ULL), // OFF
+//    MAKE_SPORK_DEF(SPORK_19_CHAINLOCKS_ENABLED,            0ULL), // OFF
+//    MAKE_SPORK_DEF(SPORK_21_QUORUM_ALL_CONNECTED,          0ULL), // OFF
+//    MAKE_SPORK_DEF(SPORK_23_QUORUM_POSE,                   0), // OFF
+//};
+
 CSporkManager sporkManager;
 
 CSporkManager::CSporkManager()

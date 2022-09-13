@@ -9,6 +9,7 @@
 
 #include <crypto/ripemd160.h>
 #include <crypto/sha256.h>
+#include <crypto/heavyhash.h>
 #include <prevector.h>
 #include <serialize.h>
 #include <uint256.h>
@@ -214,6 +215,53 @@ public:
     }
 };
 
+
+/** A writer stream (for serialization) that computes a HeavyHash. */
+class CHeavyHashWriter
+{
+private:
+    CHeavyHash ctx;
+
+    const int nType;
+    const int nVersion;
+public:
+
+    CHeavyHashWriter(uint64_t heavyhash_matrix[64*64],
+                     int nTypeIn, int nVersionIn) : ctx(heavyhash_matrix), nType(nTypeIn), nVersion(nVersionIn) {};
+
+    int GetType() const { return nType; }
+    int GetVersion() const { return nVersion; }
+
+    void write(const char *pch, size_t size) {
+        ctx.Write((const unsigned char*)pch, size);
+    }
+
+    // invalidates the object
+    uint256 GetHash() {
+        uint256 result;
+        ctx.Finalize((unsigned char*)&result);
+        return result;
+    }
+
+    /**
+     * Returns the first 64 bits from the resulting hash.
+     */
+    inline uint64_t GetCheapHash() {
+        unsigned char result[CHeavyHash::OUTPUT_SIZE];
+        ctx.Finalize(result);
+        return ReadLE64(result);
+    }
+
+    template<typename T>
+    CHeavyHashWriter& operator<<(const T& obj) {
+        // Serialize to this stream
+        ::Serialize(*this, obj);
+        return (*this);
+    }
+};
+
+
+
 /** Reads data from an underlying stream, while hashing the read data. */
 template<typename Source>
 class CHashVerifier : public CHashWriter
@@ -258,9 +306,24 @@ uint256 SerializeHash(const T& obj, int nType=SER_GETHASH, int nVersion=PROTOCOL
     return ss.GetHash();
 }
 
+/** Compute the 256-bit HeavyHash of an object's serialization*/
+template<typename T>
+uint256 SerializeHeavyHash(const T& obj, uint64_t heavyhash_matrix[64*64],
+                           const int nType=SER_GETHASH, int nVersion=PROTOCOL_VERSION)
+{
+    CHeavyHashWriter ss(heavyhash_matrix, nType, nVersion);
+    ss << obj;
+    return ss.GetHash();
+}
+
 unsigned int MurmurHash3(unsigned int nHashSeed, const std::vector<unsigned char>& vDataToHash);
 
 void BIP32Hash(const ChainCode &chainCode, unsigned int nChild, unsigned char header, const unsigned char data[32], unsigned char output[64]);
+
+/** Generates deterministically a full-rank pseudorandom matrix for HeavyHash using \p matrix_seed
+ * @pre matrix_seed must be non-zero
+ * */
+void GenerateHeavyHashMatrix(uint256 matrix_seed, uint64_t matrix[64*64]);
 
 /** SipHash-2-4 */
 class CSipHasher

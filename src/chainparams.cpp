@@ -252,6 +252,25 @@ static Consensus::LLMQParams llmq50_60 = {
         .recoveryMembers = 25,
 };
 
+static Consensus::LLMQParams llmq10_7 = {
+        .type = Consensus::LLMQ_10_7,
+        .name = "llmq_10_7",
+        .size = 10,
+        .minSize = 7,
+        .threshold = 6,
+
+        .dkgInterval = 24, // one DKG per hour
+        .dkgPhaseBlocks = 2,
+        .dkgMiningWindowStart = 10, // dkgPhaseBlocks * 5 = after finalization
+        .dkgMiningWindowEnd = 18,
+        .dkgBadVotesThreshold = 7,
+
+        .signingActiveQuorumCount = 24, // a full day worth of LLMQs
+
+        .keepOldConnections = 4,
+        .recoveryMembers = 6,
+};
+
 static Consensus::LLMQParams llmq400_60 = {
         .type = Consensus::LLMQ_400_60,
         .name = "llmq_400_60",
@@ -269,6 +288,25 @@ static Consensus::LLMQParams llmq400_60 = {
 
         .keepOldConnections = 5,
         .recoveryMembers = 100,
+};
+
+static Consensus::LLMQParams llmq50_40 = {
+        .type = Consensus::LLMQ_50_40,
+        .name = "llmq_50_40",
+        .size = 50,
+        .minSize = 40,
+        .threshold = 30,
+
+        .dkgInterval = 24 * 12, // one DKG every 12 hours
+        .dkgPhaseBlocks = 4,
+        .dkgMiningWindowStart = 20, // dkgPhaseBlocks * 5 = after finalization
+        .dkgMiningWindowEnd = 28,
+        .dkgBadVotesThreshold = 40,
+
+        .signingActiveQuorumCount = 4, // two days worth of LLMQs
+
+        .keepOldConnections = 5,
+        .recoveryMembers = 25,
 };
 
 // Used for deployment and min-proto-version signalling, so it needs a higher threshold
@@ -309,6 +347,25 @@ static Consensus::LLMQParams llmq100_67 = {
 
         .keepOldConnections = 25,
         .recoveryMembers = 50,
+};
+
+static Consensus::LLMQParams llmq20_16 = {
+        .type = Consensus::LLMQ_20_16,
+        .name = "llmq_20_16",
+        .size = 20,
+        .minSize = 16,
+        .threshold = 12,
+
+        .dkgInterval = 24, // one DKG per hour
+        .dkgPhaseBlocks = 2,
+        .dkgMiningWindowStart = 10, // dkgPhaseBlocks * 5 = after finalization
+        .dkgMiningWindowEnd = 18,
+        .dkgBadVotesThreshold = 16,
+
+        .signingActiveQuorumCount = 24, // a full day worth of LLMQs
+
+        .keepOldConnections = 25,
+        .recoveryMembers = 10,
 };
 
 
@@ -355,9 +412,11 @@ public:
         consensus.DIP0003EnforcementHash = uint256S("000007758cc899f495608f84e039a9ff0293867d2d20906fd236a8bf5ea03950");
 
         consensus.DIP0008Height = 2; // 00000000000000112e41e4b3afda8b233b8cc07c532d2eac5de097b68358c43e
-        consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // Dash: 1 day
-        consensus.nPowTargetSpacing = 2.5 * 60; // Dash: 2.5 minutes
+        consensus.powLimit =      uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
+        consensus.heavypowLimit = uint256S("00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
+
+        consensus.nPowTargetTimespan = 24 * 60 * 60; // 1 day
+        consensus.nPowTargetSpacing = 2.5 * 60; // 2.5 minutes
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 5;
@@ -427,15 +486,22 @@ public:
 	    //consensus.defaultAssumeValid = uint256S("0x000001aaabe5f339fecac0cea9eb1adec6b40add827f5adefb43c04b62332831");
         consensus.defaultAssumeValid = uint256S("0x000007758cc899f495608f84e039a9ff0293867d2d20906fd236a8bf5ea03950");
 
+
+        // Change mining algo
+        nHHActivationTime=1645806364;                          
+        nHeavyHashActivationTime=nHHActivationTime;
+        consensus.heavyHashActivationTime=nHHActivationTime;
+
+
         /**
          * The message start string is designed to be unlikely to occur in normal data.
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0xbf;
-        pchMessageStart[1] = 0x0c;
-        pchMessageStart[2] = 0x6b;
-        pchMessageStart[3] = 0xbd;
+        pchMessageStart[0] = 0xb5;
+        pchMessageStart[1] = 0xe6;
+        pchMessageStart[2] = 0xd7;
+        pchMessageStart[3] = 0xf9;
         nDefaultPort = 8888;
         nPruneAfterHeight = 100000;
 
@@ -452,8 +518,7 @@ public:
         // vSeeds.emplace_back("77.223.122.240");
         //vSeeds.emplace_back("dnsseed.dashdot.io");
         //vFixedSeeds.clear();
-        vSeeds.emplace_back("seeds.healthcarecoin.net");
-        vSeeds.emplace_back("seeds.hcc.cash");
+        vSeeds.emplace_back("seeds.healthcarecoin.net");        
         //vSeeds.clear();
         
 
@@ -478,6 +543,14 @@ public:
         consensus.llmqs[Consensus::LLMQ_400_60] = llmq400_60;
         consensus.llmqs[Consensus::LLMQ_400_85] = llmq400_85;
         consensus.llmqs[Consensus::LLMQ_100_67] = llmq100_67;
+        //consensus.llmqs[Consensus::LLMQ_10_7] = llmq10_7;
+        //consensus.llmqs[Consensus::LLMQ_50_40] = llmq50_40;
+        //consensus.llmqs[Consensus::LLMQ_20_16] = llmq20_16;
+
+        // consensus.llmqTypeChainLocks = Consensus::LLMQ_50_40;
+        // consensus.llmqTypeInstantSend = Consensus::LLMQ_10_7;
+        // consensus.llmqTypePlatform = Consensus::LLMQ_20_16;
+
         consensus.llmqTypeChainLocks = Consensus::LLMQ_400_60;
         consensus.llmqTypeInstantSend = Consensus::LLMQ_50_60;
         consensus.llmqTypePlatform = Consensus::LLMQ_100_67;
@@ -499,20 +572,28 @@ public:
         fBIP9CheckMasternodesUpgraded = true;
         //fBIP9CheckMasternodesUpgraded = false;
 
+
+
         checkpointData = {
             {
                  { 0, uint256S("0x0000002f1568bdf68617d63eee409514c6a405a44c6c7cf8a22d8d6e269b58af")},
                  { 1, uint256S("0x00000e9e986d7033cc6918c5ff7590d204bd2ad038a3f5b74a9cf5a3761cca2a")},
                  { 2, uint256S("0x000007758cc899f495608f84e039a9ff0293867d2d20906fd236a8bf5ea03950")},
                  { 1000, uint256S("0x000000005b6cf91f714ca26cafc80b47622aa2246d2d979bb27811b46819283c")},
-                 { 1736, uint256S("0x00000003230a60c57e5719a5eb5b9af6c154ad07f17e89b3e97922d332e39e7e")},                 
+                 { 1736, uint256S("0x00000003230a60c57e5719a5eb5b9af6c154ad07f17e89b3e97922d332e39e7e")},
+                 { 10000, uint256S("0x00000000000015b9fb2f459a957f361a42dff4ba4d48ec87f93702db858cca0c")},
+                 { 20000, uint256S("0x000000000000743ab76fdde410259a3e4442d006c5c6ac2a3f1cbb2e9b9d3613")},
+                 { 30000, uint256S("0x000000000002b936398a3929b31ff72c55bff32f57994076f9fb4d37cd7f761f")},
+                 { 60000, uint256S("0x000000000000d077eee7c0f6185a667f1988a0b9b6a4c1d9b6056140e39ecc1f")},
+                 { 80000, uint256S("0x00000000000058755dd48e22f250e382bff6bc763b42b48590a309c92a3de5fd")},                 
+                 { 100000, uint256S("0x000000000000a76055d18bc7ab24b744279bc8f7345ed614c20d5608303f870f")},
             }
         };
 
         chainTxData = ChainTxData{
-             1626000089,
-             5082,
-             0.2             
+             1663081894,
+             217013,
+             0.0015             
         };
     }    
 };

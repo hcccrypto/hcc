@@ -477,7 +477,13 @@ crypto_libhcc_crypto_base_a_SOURCES += \
   crypto/sph_shavite.h \
   crypto/sph_simd.h \
   crypto/sph_skein.h \
-  crypto/sph_types.h
+  crypto/sph_types.h \
+  crypto/tiny_sha3/sha3.h \
+  crypto/tiny_sha3/sha3.cpp \
+  crypto/heavyhash.h \
+  crypto/heavyhash.cpp \
+  crypto/xoshiro256pp.h
+
 
 crypto_libhcc_crypto_shani_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 crypto_libhcc_crypto_shani_a_CPPFLAGS = $(AM_CPPFLAGS)
@@ -522,7 +528,9 @@ libhcc_consensus_a_SOURCES = \
   uint256.h \
   utilstrencodings.cpp \
   utilstrencodings.h \
-  version.h
+  version.h \
+  util/matrixchecks.cpp \
+  util/matrixcheck.h
 
 # common: shared between hccd, and hcc-qt and non-server tools
 libhcc_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
@@ -583,6 +591,8 @@ libhcc_util_a_SOURCES = \
   utilmoneystr.cpp \
   utilstrencodings.cpp \
   utiltime.cpp \
+  util/matrixchecks.cpp \
+  util/matrixcheck.h \
   $(BITCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT

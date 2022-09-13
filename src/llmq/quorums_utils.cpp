@@ -309,6 +309,9 @@ bool CLLMQUtils::IsQuorumTypeEnabled(Consensus::LLMQType llmqType, const CBlockI
         case Consensus::LLMQ_50_60:
         case Consensus::LLMQ_400_60:
         case Consensus::LLMQ_400_85:
+        case Consensus::LLMQ_10_7:
+        case Consensus::LLMQ_20_16:
+        case Consensus::LLMQ_50_40:
             break;
         case Consensus::LLMQ_100_67:
         case Consensus::LLMQ_TEST_V17:

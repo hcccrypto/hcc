@@ -131,6 +131,7 @@ protected:
     std::vector<std::string> vSporkAddresses;
     int nMinSporkKeys;
     bool fBIP9CheckMasternodesUpgraded;
+    uint32_t nHHActivationTime;
 };
 
 /**
