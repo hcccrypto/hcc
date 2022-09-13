@@ -1,7 +1,7 @@
-HCC Core staging tree 0.17
+HCC Core staging tree 0.18
 ===========================
 
-https://www.hcc.cash
+https://www.healthcarecoin.net
 
 
 What is Health Care Coin?
