@@ -660,7 +660,7 @@ void SetupServerArgs()
 std::string LicenseInfo()
 {
     const std::string URL_SOURCE_CODE = "<https://github.com/hcccrypto/hcc>";
-    const std::string URL_WEBSITE = "<https://hcc.cash>";
+    const std::string URL_WEBSITE = "<https://healthcarecoin.net>";
 
     return CopyrightHolders(_("Copyright (C)"), 2021, COPYRIGHT_YEAR) + "\n" +
            "\n" +

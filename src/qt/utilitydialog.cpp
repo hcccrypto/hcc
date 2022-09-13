@@ -153,7 +153,7 @@ For more information, see the <a style=\"%2\" href=\"%3\">%1 documentation</a>."
         )
         .arg("CoinJoin")
         .arg(GUIUtil::getThemedStyleQString(GUIUtil::ThemedStyle::TS_COMMAND))
-        .arg("https://docs.hcc.cash/en/stable/wallets/hcccore/coinjoin-instantsend.html")
+        .arg("https://docs.healthcarecoin.net/en/stable/wallets/hcccore/coinjoin-instantsend.html")
         );
         ui->aboutMessage->setWordWrap(true);
         ui->helpMessage->setVisible(false);
