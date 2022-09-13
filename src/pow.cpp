@@ -81,11 +81,12 @@ unsigned int static KimotoGravityWell(const CBlockIndex* pindexLast, const Conse
 
 unsigned int static DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params) {
     /* current difficulty formula, dash - DarkGravity v3, written by Evan Duffield - evan@dash.org */
-    arith_uint256 bnPowLimit;
-    if (pindexLast->nTime < nHeavyHashActivationTime)
-        bnPowLimit = UintToArith256(params.powLimit);
-    else 
-        bnPowLimit = UintToArith256(uint256S("01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+    const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
+    // if (pindexLast->nTime < nHeavyHashActivationTime)
+    //     bnPowLimit = UintToArith256(params.powLimit);
+    // else 
+    //     bnPowLimit = UintToArith256(uint256S("01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+    
     int64_t nPastBlocks = 24;
 
     // make sure we have at least (nPastBlocks + 1) blocks, otherwise just return powLimit
@@ -273,8 +274,8 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
     if (fNegative || bnTarget == 0 || fOverflow || bnTarget > UintToArith256(powLimit))
         return false;
 
-    std::cout<<"HASH: "<<UintToArith256(hash).ToString()<<std::endl;
-    std::cout<<"TARGET: "<<bnTarget.ToString()<<std::endl;
+    //std::cout<<"HASH: "<<UintToArith256(hash).ToString()<<std::endl;
+    //std::cout<<"TARGET: "<<bnTarget.ToString()<<std::endl;
 
 
     // Check proof of work matches claimed amount

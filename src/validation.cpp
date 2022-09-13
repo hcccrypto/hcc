@@ -3547,8 +3547,8 @@ static bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, 
 static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
 {
     // Check proof of work matches claimed amount
-    std::cout<<"HASH: "<<block.GetHash().ToString()<<std::endl;
-    std::cout<<"TIME: "<<block.GetBlockTime()<<std::endl;
+    //std::cout<<"HASH: "<<block.GetHash().ToString()<<std::endl;
+    //std::cout<<"TIME: "<<block.GetBlockTime()<<std::endl;
     if (fCheckPOW && !CheckProofOfWork(block.GetHash(), block.nBits, consensusParams, block.GetBlockTime()))
         return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
 
