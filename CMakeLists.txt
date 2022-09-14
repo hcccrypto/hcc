@@ -45,6 +45,8 @@ file(GLOB SOURCE_FILES
         src/bench/*.h
         src/bls/*.cpp
         src/bls/*.h
+        src/util/*.cpp
+        src/util/*.h
         src/coinjoin/*.cpp
         src/coinjoin/*.h
         src/compat/*.cpp
