@@ -1,5 +1,5 @@
 ---
-name: "hcc-win-0.18"
+name: "hcc-linux-0.18"
 enable_cache: true
 suites:
 - "bionic"
