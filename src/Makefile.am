@@ -44,6 +44,7 @@ BITCOIN_INCLUDES=-I$(builddir) $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFL
 
 BITCOIN_INCLUDES += -I$(srcdir)/secp256k1/include
 BITCOIN_INCLUDES += -I$(srcdir)/util
+BITCOIN_INCLUDES += -I$(srcdir)/matrix-utils/singular
 BITCOIN_INCLUDES += $(UNIVALUE_CFLAGS)
 
 BLS_LIBS=-lbls-dash -lgmp
@@ -531,7 +532,14 @@ libhcc_consensus_a_SOURCES = \
   utilstrencodings.h \
   version.h \
   util/matrixchecks.cpp \
-  util/matrixchecks.h
+  util/matrixchecks.h \
+  matrix-utils/singular/DiagonalMatrix.h \
+  matrix-utils/singular/Matrix.h \
+  matrix-utils/singular/Reflector.h \
+  matrix-utils/singular/Rotator.h \
+  matrix-utils/singular/singular.h \
+  matrix-utils/singular/Svd.h \
+  matrix-utils/singular/Vector.h
 
 # common: shared between hccd, and hcc-qt and non-server tools
 libhcc_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
@@ -594,6 +602,13 @@ libhcc_util_a_SOURCES = \
   utiltime.cpp \
   util/matrixchecks.cpp \
   util/matrixchecks.h \
+  matrix-utils/singular/DiagonalMatrix.h \
+  matrix-utils/singular/Matrix.h \
+  matrix-utils/singular/Reflector.h \
+  matrix-utils/singular/Rotator.h \
+  matrix-utils/singular/singular.h \
+  matrix-utils/singular/Svd.h \
+  matrix-utils/singular/Vector.h \  
   $(BITCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT
