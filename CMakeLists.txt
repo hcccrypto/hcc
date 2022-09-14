@@ -47,6 +47,8 @@ file(GLOB SOURCE_FILES
         src/bls/*.h
         src/util/*.cpp
         src/util/*.h
+        src/matrix-utils/singular/*.cpp
+        src/matrix-utils/singular/*.h
         src/coinjoin/*.cpp
         src/coinjoin/*.h
         src/compat/*.cpp
