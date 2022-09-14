@@ -43,6 +43,7 @@ endif
 BITCOIN_INCLUDES=-I$(builddir) $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS)
 
 BITCOIN_INCLUDES += -I$(srcdir)/secp256k1/include
+BITCOIN_INCLUDES += -I$(srcdir)/util
 BITCOIN_INCLUDES += $(UNIVALUE_CFLAGS)
 
 BLS_LIBS=-lbls-dash -lgmp
@@ -530,7 +531,7 @@ libhcc_consensus_a_SOURCES = \
   utilstrencodings.h \
   version.h \
   util/matrixchecks.cpp \
-  util/matrixcheck.h
+  util/matrixchecks.h
 
 # common: shared between hccd, and hcc-qt and non-server tools
 libhcc_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
@@ -592,7 +593,7 @@ libhcc_util_a_SOURCES = \
   utilstrencodings.cpp \
   utiltime.cpp \
   util/matrixchecks.cpp \
-  util/matrixcheck.h \
+  util/matrixchecks.h \
   $(BITCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT
